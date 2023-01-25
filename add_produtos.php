@@ -3,12 +3,7 @@
 <?php
     include_once('../app/gravar_verificacao.php');
     include_once('../app/admin_verifica.php');
-    include_once('../app/selectProdutos.php');
-    include_once("listar.php");
-
-    
-    $cliente = new Class_Cliente();
-$cat = new Class_Venda();
+    include_once('../app/selectProduto.php');
 ?>
 <html lang="en">
 
@@ -43,39 +38,6 @@ $cat = new Class_Venda();
 
     <!-- Main CSS-->
     <link href="css/theme.css" rel="stylesheet" media="all">
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['bar']});
-      google.charts.setOnLoadCallback(drawStuff);
-
-      function drawStuff() {
-        var data = new google.visualization.arrayToDataTable([
-          ['Move', 'Percentage'],
-    <?php foreach ($cat->listar() as $key => $value){
-         echo "['" .$value->produto."', " .$value->qtd."],";
-         
-        }?>
-        ]);
-
-        var options = {
-          width: 500,
-          legend: { position: 'none' },
-          chart: {
-            title: 'Chess opening moves',
-            subtitle: 'popularity by percentage' },
-          axes: {
-            x: {
-              0: { side: 'top', label: 'White to move'} // Top x-axis.
-            }
-          },
-          bar: { groupWidth: "90%" }
-        };
-
-        var chart = new google.charts.Bar(document.getElementById('top_x_div'));
-        // Convert the Classic options to Material options.
-        chart.draw(data, google.charts.Bar.convertOptions(options));
-      };
-    </script>
 
 </head>
 
@@ -313,14 +275,12 @@ $cat = new Class_Venda();
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
                         <div class="header-wrap">
-                        
-                            <form class="form-header" action="?" method="POST">
+                            <form class="form-header" action="" method="POST">
                                 <input class="au-input au-input--xl" type="text" name="search" placeholder="Search for datas &amp; reports..." />
                                 <button class="au-btn--submit" type="submit">
                                     <i class="zmdi zmdi-search"></i>
                                 </button>
                             </form>
-                            
                             <div class="header-button">
                                 <div class="noti-wrap">
                                     <div class="noti__item js-item-menu">
@@ -488,9 +448,24 @@ $cat = new Class_Venda();
             <div class="main-content">
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
+                     <?php
+                                    if(isset($_GET['acao']) == "sucess"){
+                                     echo"
+                                        <center>
+                                            <h5 class='title-1' style='color:#5bff33;'>Produto Adicionado com sucesso</h5>
+                                        </center>
+                                        ";
+                                    }
+                                  ?>
                         <div class="row">
                             <div class="col-md-12">
-                               
+                                <div class="overview-wrap">
+                                 
+                                   
+                                   
+                                   <a href="index.php">  <button class="au-btn au-btn-icon au-btn--blue">
+                                        <i class="zmdi"></i>Visualizar Produtos</button></a>
+                                </div>
                             </div>
                         </div>
                         <div class="row m-t-25">
@@ -502,8 +477,8 @@ $cat = new Class_Venda();
                                                 <i class="zmdi zmdi-account-o"></i>
                                             </div>
                                             <div class="text">
-                                            <h2><?php echo $cliente->listarQtd(); ?></h2>
-                                                <span>Clientes registrado</span>
+                                                <h2>10368</h2>
+                                                <span>members online</span>
                                             </div>
                                         </div>
                                         <div class="overview-chart">
@@ -520,8 +495,8 @@ $cat = new Class_Venda();
                                                 <i class="zmdi zmdi-shopping-cart"></i>
                                             </div>
                                             <div class="text">
-                                            <h2><?php echo $cat->listarQtdP(); ?></h2>
-                                                <span>items vendido</span>
+                                                <h2>388,688</h2>
+                                                <span>items solid</span>
                                             </div>
                                         </div>
                                         <div class="overview-chart">
@@ -539,7 +514,7 @@ $cat = new Class_Venda();
                                             </div>
                                             <div class="text">
                                                 <h2>1,086</h2>
-                                                <span>Esta semana</span>
+                                                <span>this week</span>
                                             </div>
                                         </div>
                                         <div class="overview-chart">
@@ -556,11 +531,8 @@ $cat = new Class_Venda();
                                                 <i class="zmdi zmdi-money"></i>
                                             </div>
                                             <div class="text">
-                                                <h3>
-                                                <h2><?php echo number_format($cat->listarQtd(),'2',',','.');?>kz</h2></h3>
-                                                   
-                                                
-                                                <span>Ganhos totais</span>
+                                                <h2>$1,060,386</h2>
+                                                <span>total earnings</span>
                                             </div>
                                         </div>
                                         <div class="overview-chart">
@@ -569,31 +541,103 @@ $cat = new Class_Venda();
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                           </div>
+                          <h2 class="title-1" style=" color:#9633ff;">Cadastro de Produtos</h2>
+                            <br>
+                            <br>
+                    
                         
-                                               
-             
-            <!-- END MAIN CONTENT-->
-            <!-- END PAGE CONTAINER-->
-            
+  <form action ="../app/add_produtos.php?info=add" method="POST" enctype="multipart/form-data">
+  
+  <div class="form-row">
+  
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Produto</label>
+      <input type="text" class="form-control" required name="produto" id="inputEmail4" placeholder="Produto">
+    </div>
+    
+    <div class="form-group col-md-6">
+     <label for="inputAddress">Categoria</label>
+     <select required id="inputEstado" class="form-control" name="categoria">
+        <option selected>Escolher...</option>
+        <?php
+            if(mysqli_num_rows($resultado)>0){
+                while($data=mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
+                
+                    echo "<option>".$data['categoria']."</option>";
+                
+                }
+            }
+        
+        ?>
+      </select>
+    </div>
+    
+  </div>
+  <div class="form-group">
+   <label for="inputPassword4">Descrição</label>
+      <textarea required class="form-control" id="inputPassword4" name="descricao" row= "5" placeholder="Descrição"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress2">Quantidade</label>
+    <input type="number" required class="form-control" name="quantidade" id="inputAddress2" placeholder="0">
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">Codigo de Ordem</label>
+      <input type="text" required class="form-control"  name="idapp" id="inputCity">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputEstado">Estado</label>
+      <select id="inputEstado" required class="form-control" name="estado">
+        <option selected>Escolher...</option>
+            <option>stock</option>
+            <option>esgotado</option>
+         
+        
+      </select>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputCEP">Preço Unitário</label>
+      <input type="text" class="form-control" required name="preco" id="inputCEP">
+    </div>
+  </div>
+  
+    <div class="form-group">
+    <label for="exampleFormControlFile1">Imagem</label>
+    <input type="file" class="form-control-file" required name="ficheiro" id="exampleFormControlFile1">
+  </div>
+  
+  <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="gridCheck">
+      <label class="form-check-label" for="gridCheck">
+        Clique em mim
+      </label>
+    </div>
+  </div>
 
-
-            <section>
-                 <div id="top_x_div" style="width: 800px; height: 600px;"></div>
-            </section>
-            
-                <div class="row">
+  
+  <button type="submit" class="btn btn-primary">Cadastrar</button>
+</form>
+                        
+                       <!--fim formulario-->
+                       
+                        <div class="row">
                             <div class="col-md-12">
                                 <div class="copyright">
-                                    <p>Gtwork-ecomerce <a href="https://colorlib.com">gtwork</a>.</p>
+                                    <p>Gtwork-Electronics V.1.2 <a href="https://colorlib.com">Gtwork</a>.</p>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTENT-->
+            <!-- END PAGE CONTAINER-->
         </div>
 
     </div>
-    
-    
 
     <!-- Jquery JS-->
     <script src="vendor/jquery-3.2.1.min.js"></script>
